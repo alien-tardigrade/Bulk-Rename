@@ -15,7 +15,7 @@ namespace bulk_rename
 
             var folderPath = args[0];
             var action = args[1].ToLower();
-            var logFilePath = Path.Combine(folderPath, $"rename_log_{DateTime.Now:yyyyMMddHHmmss}.txt");
+            var logFilePath = Path.Combine(folderPath, $"rename_log_{DateTime.Now:yyyyMMddHHmmss}.log");
             var excludedExtensions = args.Length > 2 ? args[2].Split(',') : [];
 
             try
@@ -95,7 +95,7 @@ namespace bulk_rename
          */
         private static void ReverseRenaming(string folderPath)
         {
-            var logFiles = Directory.GetFiles(folderPath, "rename_log_*.txt")
+            var logFiles = Directory.GetFiles(folderPath, "rename_log_*.log")
                 .OrderByDescending(File.GetCreationTime)
                 .ToArray();
             if (logFiles.Length == 0)
