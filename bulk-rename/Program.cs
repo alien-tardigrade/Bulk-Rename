@@ -6,6 +6,7 @@ namespace bulk_rename
     {
         private static void Main(string[] args)
         {
+            // Validate required Arguments are present
             if (args.Length < 2)    
             {
                 Console.WriteLine("Usage: bulk-rename <folder-path> <rename|reverse> [excluded-extensions]");
@@ -37,7 +38,13 @@ namespace bulk_rename
                 LogError($"An error occurred: {ex.Message}");
             }
         }
-
+        
+        /**
+         * Renames files in the specified folder.
+         * @param folderPath The path to the folder containing the files to rename.
+         * @param logFilePath The path to the log file to write the renaming details.
+         * @param excludedExtensions An array of file extensions to exclude from renaming.
+         */
         private static void RenameFiles(string folderPath, string logFilePath, string[] excludedExtensions)
         {
             try
@@ -81,13 +88,17 @@ namespace bulk_rename
                 LogError($"An error occurred while renaming files: {ex.Message}");
             }
         }
-
+        
+        /**
+         * Reverses the renaming of files in the specified folder.
+         * @param folderPath The path to the folder containing the files to rename back to original names.
+         */
         private static void ReverseRenaming(string folderPath)
         {
             var logFiles = Directory.GetFiles(folderPath, "rename_log_*.txt")
                 .OrderByDescending(File.GetCreationTime)
                 .ToArray();
-            if (!logFiles.Any())
+            if (logFiles.Length == 0)
             {
                 Console.WriteLine("Log file not found. Cannot reverse renaming.");
                 return;
@@ -124,6 +135,12 @@ namespace bulk_rename
             Console.WriteLine("Files renamed back to original names successfully.");
         }
         
+        /**
+         * Reverses the renaming of files in the specified folder.
+         * @param folderPath The path to the folder containing the files to rename back to original names.
+         * @param logFilePath The path to the log file containing the renaming details.
+         * @deprecated Use the method without logFilePath parameter.
+         */
         private static void ReverseRenaming(string folderPath, string logFilePath)
         {
             if (!File.Exists(logFilePath))
